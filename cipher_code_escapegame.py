@@ -18,10 +18,11 @@ def intro_screen():
     st.write("문은 굳게 잠겨있고, 오직 당신의 지혜만이 이 미로를 벗어날 수 있습니다.")
     st.write("각 방의 퍼즐을 풀고 다음 방으로 나아가세요! 행운을 빕니다.")
 
-    # '게임 시작' 버튼을 눌러야만 다음 방으로 이동하고 앱을 새로고침합니다.
+    # '게임 시작' 버튼을 눌렀을 때만 다음 방으로 이동합니다.
+    # st.experimental_rerun()은 이 버튼 내부에서만 호출해야 합니다.
     if st.button("게임 시작"):
         st.session_state.current_room = "room1"
-        st.experimental_rerun() # 현재 Streamlit 앱을 처음부터 다시 실행하여 화면을 전환합니다.
+        st.experimental_rerun() # 버튼 클릭 시에만 호출
 
 def room1():
     st.header("첫 번째 방: 낡은 강의실")
@@ -108,8 +109,10 @@ def room3():
     st.write("컴퓨터 화면에는 다음과 같은 내용이 보입니다.")
     st.code("암호 메시지: 이 숫자를 소인수 분해하여 두 개의 비밀스러운 소수를 찾아내세요. 두 소수를 **작은 수부터 순서대로 입력**하세요.")
     st.write("---")
-    st.write("주어진 큰 숫자 **N**: (이 숫자를 소인수 분해해야 합니다)")
-    st.code("N = 18923") # 예시 N 값 (실제 RSA는 훨씬 더 큰 수 사용)
+    # N 값을 변수로 정의하여 사용하면 더 좋습니다.
+    N = 18923 
+    st.write(f"주어진 큰 숫자 **N**: (이 숫자를 소인수 분해해야 합니다)")
+    st.code(f"N = {N}") # 예시 N 값 (실제 RSA는 훨씬 더 큰 수 사용)
     st.write("RSA 암호는 두 개의 큰 소수를 곱하여 공개키를 만듭니다. 당신은 그 두 소수를 찾아내야 합니다.")
     st.markdown("**(힌트: 1부터 차례대로 N을 나눌 수 있는 소수를 찾아보세요. 종이와 펜 또는 계산기를 활용해도 좋습니다.)**")
 
@@ -132,7 +135,7 @@ def room3():
         correct_q = 167
 
         # 입력받은 p, q가 유효한지 1차 검증
-        if p_input > 1 and q_input > 1 and p_input * q_input == N: # N은 암호문의 실제 값입니다.
+        if p_input > 1 and q_input > 1 and p_input * q_input == N: 
             if is_prime(p_input) and is_prime(q_input): # 두 숫자가 소수인지 확인
                 # 작은 수부터 순서대로 입력했는지 확인
                 if (p_input == correct_p and q_input == correct_q):
